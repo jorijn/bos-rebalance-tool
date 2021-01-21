@@ -1,0 +1,19 @@
+{
+  "name": "bos-rebalance-tool",
+  "version": "0.0.1",
+  "description": "Tool for opinionated rebalancing using Balance of Satoshis",
+  "main": "bos-rt.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jorijn Schrijvershof <jorijn@jorijn.com>",
+  "license": "ISC",
+  "dependencies": {
+    "balanceofsatoshis": "^7.17.1",
+    "caporal": "^1.4.0",
+    "import-lazy": "^4.0.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.2.1"
+  }
+}
