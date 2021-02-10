@@ -30,6 +30,7 @@ $ npm ci --production
    OPTIONS
 
      --node <node_name>                                     Get details from named node                                                                  optional
+     --sort-strategy <sort_strategy>                        Sorting strategy for matching channels (default: size, available: size, shuffle)             optional
      --trigger-percentage-in <trigger_percentage_in>        Use specific percentage for triggering consideration of channel, default: 10 (inbound)       optional
      --trigger-percentage-out <trigger_percentage_out>      Use specific percentage for triggering consideration of channel, default: 10 (outbound)      optional
      --avoid <pubkey>                                       Avoid forwarding through node                                                                optional
