@@ -17,6 +17,10 @@ prog
   )
   .option("--node <node_name>", "Get details from named node")
   .option(
+    "--sort-strategy <sort_strategy>",
+    "Sorting strategy for matching channels (default: size, available: size, shuffle)"
+  )
+  .option(
     "--trigger-percentage-in <trigger_percentage_in>",
     "Use specific percentage for triggering consideration of channel, default: 10 (inbound)",
     INT
@@ -47,6 +51,7 @@ prog
           max_fee: options.maxFee,
           max_fee_rate: options.maxFeeRate,
           timeout_minutes: options.minutes || undefined,
+          sort_strategy: options.sortStrategy || "size",
         },
         responses.returnObject({ logger, reject, resolve })
       );

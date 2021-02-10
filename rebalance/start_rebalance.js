@@ -6,6 +6,7 @@ const lnd = importLazy("balanceofsatoshis/lnd");
 const asyncAuto = require("async/auto");
 const asyncEach = require("async/each");
 const { returnResult } = require("asyncjs-util");
+const sortingStrategies = require("./sorting_strategies");
 
 module.exports = (args, cbk) => {
   return asyncAuto(
@@ -21,6 +22,20 @@ module.exports = (args, cbk) => {
               cbk(null, { lnd: res.lnd });
             }
           );
+        },
+      ],
+
+      sortStrategyFn: [
+        (cbk) => {
+          if (sortingStrategies[args.sort_strategy] !== undefined) {
+            cbk(null, sortingStrategies[args.sort_strategy]);
+          } else {
+            throw new Error(
+              "sorting strategy `" +
+                args.sort_strategy +
+                "` is not implemented."
+            );
+          }
         },
       ],
 
@@ -75,7 +90,8 @@ module.exports = (args, cbk) => {
 
       jobs: [
         "candidates",
-        ({ candidates }, cbk) => {
+        "sortStrategyFn",
+        ({ candidates, sortStrategyFn }, cbk) => {
           const channels = candidates
             .map((channel) => {
               const target_liquidity = Math.round(channel.total_liquidity / 2);
@@ -114,20 +130,12 @@ module.exports = (args, cbk) => {
             return cbk(null, []);
           }
 
-          // sort both sides on send_to_out-/inbound, descending
-          channels.outbound.sort(
-            (a, b) => b.send_to_outbound - a.send_to_outbound
-          );
-          channels.inbound.sort(
-            (a, b) => b.send_to_inbound - a.send_to_inbound
-          );
+          // sort the channels with the chosen strategy
+          sortStrategyFn(channels);
 
           // just a very mvp strategy here, assign 0 to 0, 1 to 1, etc, uneven inbound channels are left out for now
           let jobs = [];
           for (let x = 0; x < channels.outbound.length; x++) {
-            // console.log(x);
-            // console.log(channels.outbound[x]);
-            // console.log(channels.inbound[x]);
             if (
               channels.outbound[x] === undefined ||
               channels.inbound[x] === undefined
@@ -138,7 +146,6 @@ module.exports = (args, cbk) => {
             jobs.push({
               outbound: channels.outbound[x],
               inbound: channels.inbound[x],
-              // TODO: add amount here of let bos figure it out?
             });
           }
 

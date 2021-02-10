@@ -6,6 +6,10 @@ This tool will gather all lopsided channels, match them to each other by size an
 
 It's meant to run in a periodic cronjob.
 
+## Warning
+
+No warranty is given. This tool was created for personal use. Please do your own research if this fits your desired use-case and test on testnet server(s) first. 
+
 ## Install
 ```shell
 $ git clone git@github.com:Jorijn/bos-rebalance-tool.git
